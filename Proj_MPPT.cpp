@@ -45,7 +45,7 @@ void loop() {
 
   float pot_in = tensao * corrente;
 
-  // --- BLOCO DE SEGURANÇA ALTERADO ---
+  
   if (pot_in > 11.0) {
     valor_pwm = valor_pwm - 5;                 
     valor_pwm = constrain(valor_pwm, 10, 245); 
