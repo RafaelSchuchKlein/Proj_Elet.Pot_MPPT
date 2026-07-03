@@ -55,7 +55,7 @@ void loop() {
     return;                                    
   }
   
-  // O "else" foi removido porque o "return" acima já separa as duas situações perfeitamente
+  
   float delta_pot = pot_in - potAntes;
 
   if (delta_pot < 0) {
