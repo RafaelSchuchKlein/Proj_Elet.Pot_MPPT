@@ -45,19 +45,25 @@ void loop() {
 
   float pot_in = tensao * corrente;
 
+  // --- BLOCO DE SEGURANÇA ALTERADO ---
   if (pot_in > 11.0) {
-    valor_pwm--;
+    valor_pwm = valor_pwm - 5;                 
+    valor_pwm = constrain(valor_pwm, 10, 245); 
+    analogWrite(pwmPin, valor_pwm);            
+    potAntes = pot_in;                        
+    delay(50);                                 
+    return;                                    
   }
-  else {
-    float delta_pot = pot_in - potAntes;
+  
+  // O "else" foi removido porque o "return" acima já separa as duas situações perfeitamente
+  float delta_pot = pot_in - potAntes;
 
-    if (delta_pot < 0) {
-      passo = -passo;
-    }
-
-    valor_pwm = valor_pwm + passo;
-    potAntes = pot_in;
+  if (delta_pot < 0) {
+    passo = -passo;
   }
+
+  valor_pwm = valor_pwm + passo;
+  potAntes = pot_in;
 
   valor_pwm = constrain(valor_pwm, 10, 245);
   analogWrite(pwmPin, valor_pwm);
