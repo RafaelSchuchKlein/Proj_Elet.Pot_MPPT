@@ -1,4 +1,4 @@
-# Proj_Elet.Pot_MPPT
+# Algoritmo MPPT P&O
 Algoritmo P&amp;O para controle MPPT - Projeto Eletrônica de Potencia 01/2026
 ## Algoritmo MPPT: Perturba e Observa (P&O)
 
