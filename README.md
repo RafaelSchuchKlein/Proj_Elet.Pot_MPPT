@@ -39,14 +39,26 @@ Embora o P&O tradicional busque sempre o limite máximo do painel (30W), este pr
 
 ```mermaid
 graph TD
-    A([Início do Ciclo]) --> B[Mede V e I no INA219]
-    B --> C[Calcula Potência Atual P = V * I]
-    C --> D{Potência > 11W?}
-    D -- Sim --> E[Reduz PWM - Segurança] --> H
-    D -- Não --> F[Calcula Delta P: P_atual - P_anterior]
-    F --> G{Delta P < 0?}
-    G -- Sim --> Inverte[Inverte Direção do Passo] --> Ajusta[Aplica Passo no PWM]
-    G -- Não --> Ajusta --> H[Aplica Limites Constrain]
-    H --> I[Atualiza P_anterior = P_atual]
-    I --> J[Aplica analogWrite] --> K([Aguarda 50ms])
-    K --> A
+    A([Início do Loop]) --> B[Mede V e I no INA219]
+    B --> C[Calcula Potência Atual pot_in = tensao * corrente]
+    C --> D{pot_in > 11.0W?}
+    
+    %% Bloco de Segurança
+    D -- Sim --> E[valor_pwm = valor_pwm - 5]
+    E --> F[Aplica Constrain 10 a 245]
+    F --> G[analogWrite valor_pwm]
+    G --> H[potAntes = pot_in]
+    H --> I[Aguarda 50ms]
+    I --> J[return: Reinicia o Loop]
+    J --> A
+
+    %% Lógica P&O Normal
+    D -- Não --> K[Calcula delta_pot = pot_in - potAntes]
+    K --> L{delta_pot < 0?}
+    L -- Sim --> M[Inverte o sinal do passo] --> N[valor_pwm = valor_pwm + passo]
+    L -- Não --> N
+    N --> O[potAntes = pot_in]
+    O --> P[Aplica Constrain 10 a 245]
+    P --> Q[analogWrite valor_pwm]
+    Q --> R[Aguarda 50ms]
+    R --> A
