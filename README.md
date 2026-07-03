@@ -39,26 +39,22 @@ Embora o P&O tradicional busque sempre o limite máximo do painel (30W), este pr
 
 ```mermaid
 graph TD
-    A([Início do Loop]) --> B[Mede V e I no INA219]
-    B --> C[Calcula Potência Atual pot_in = tensao * corrente]
-    C --> D{pot_in > 11.0W?}
+    A([Início do Ciclo]) --> B[Mede a Tensão e a Corrente do Painel]
+    B --> C[Calcula a Potência Atual]
+    C --> D{A potência é maior que 11W?}
     
     %% Bloco de Segurança
-    D -- Sim --> E[valor_pwm = valor_pwm - 5]
-    E --> F[Aplica Constrain 10 a 245]
-    F --> G[analogWrite valor_pwm]
-    G --> H[potAntes = pot_in]
-    H --> I[Aguarda 50ms]
-    I --> J[return: Reinicia o Loop]
-    J --> A
+    D -- Sim --> E[Diminui o Ciclo de Trabalho PWM]
+    E --> F[Aplica a alteração na Bomba]
+    F --> G[Aguarda 50ms para estabilização]
+    G --> H[Reinicia o Ciclo imediatamente]
+    H --> A
 
     %% Lógica P&O Normal
-    D -- Não --> K[Calcula delta_pot = pot_in - potAntes]
-    K --> L{delta_pot < 0?}
-    L -- Sim --> M[Inverte o sinal do passo] --> N[valor_pwm = valor_pwm + passo]
-    L -- Não --> N
-    N --> O[potAntes = pot_in]
-    O --> P[Aplica Constrain 10 a 245]
-    P --> Q[analogWrite valor_pwm]
-    Q --> R[Aguarda 50ms]
-    R --> A
+    D -- Não --> I{A potência aumentou em relação ao ciclo anterior?}
+    I -- Sim --> J[Mantém a direção do ajuste anterior] --> L[Ajusta o Ciclo de Trabalho PWM]
+    I -- Não --> K[Inverte a direção do ajuste anterior] --> L
+    L --> M[Aplica a alteração na Bomba]
+    M --> N[Guarda a potência atual para comparar depois]
+    N --> O[Aguarda 50ms para estabilização]
+    O --> A
