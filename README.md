@@ -39,22 +39,22 @@ Embora o P&O tradicional busque sempre o limite máximo do painel (30W), este pr
 
 ```mermaid
 graph TD
-    A([Início do Ciclo]) --> B[Mede a Tensão e a Corrente do Painel]
-    B --> C[Calcula a Potência Atual]
-    C --> D{A potência é maior que 11W?}
+    A([Início do Ciclo]) --> B["Mede Tensão e Corrente"]
+    B --> C["Calcula Potência Atual"]
+    C --> D{"Potência > 11W?"}
     
     %% Bloco de Segurança
-    D -- Sim --> E[Diminui o Ciclo de Trabalho PWM]
-    E --> F[Aplica a alteração na Bomba]
-    F --> G[Aguarda 50ms para estabilização]
-    G --> H[Reinicia o Ciclo imediatamente]
+    D -- Sim --> E["Diminui PWM (-5)"]
+    E --> F["Aplica na Bomba"]
+    F --> G["Aguarda 50ms"]
+    G --> H["Reinicia o Ciclo"]
     H --> A
 
     %% Lógica P&O Normal
-    D -- Não --> I{A potência aumentou em relação ao ciclo anterior?}
-    I -- Sim --> J[Mantém a direção do ajuste anterior] --> L[Ajusta o Ciclo de Trabalho PWM]
-    I -- Não --> K[Inverte a direção do ajuste anterior] --> L
-    L --> M[Aplica a alteração na Bomba]
-    M --> N[Guarda a potência atual para comparar depois]
-    N --> O[Aguarda 50ms para estabilização]
+    D -- Não --> I{"Potência aumentou?"}
+    I -- Sim --> J["Mantém direção do ajuste"] --> L["Ajusta o PWM"]
+    I -- Não --> K["Inverte direção do ajuste"] --> L
+    L --> M["Aplica na Bomba"]
+    M --> N["Salva Potência Atual"]
+    N --> O["Aguarda 50ms"]
     O --> A
