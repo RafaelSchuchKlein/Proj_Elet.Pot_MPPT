@@ -4,7 +4,7 @@ Algoritmo P&amp;O para controle MPPT - Projeto Eletrônica de Potencia 01/2026
 
 O principal mecanismo para o controle de energia deste projeto é o algoritmo **Perturba e Observa (P&O)**. Ele é uma técnica de Rastreamento do Ponto de Máxima Potência (MPPT) amplamente utilizada em sistemas fotovoltaicos devido à sua simplicidade de implementação e alta eficiência.
 
-O objetivo principal do algoritmo é ajustar continuamente o ciclo de trabalho (*duty cycle*) do conversor Buck para fazer com que o painel solar opere sempre no seu "joelho" de máxima potência ($V_{mp} \approx 18.5\text{V}$), adaptando-se instantaneamente a mudanças na irradiação solar e temperatura.
+O objetivo principal do algoritmo é ajustar continuamente o ciclo de trabalho (*duty cycle*) do conversor Buck para fazer com que o painel solar opere sempre no seu "joelho" de máxima potência ($V_{mp} \approx 19.0\text{V}$), adaptando-se instantaneamente a mudanças na irradiação solar e temperatura.
 
 ### Como Funciona a Lógica?
 
